@@ -1,25 +1,19 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  TextInput,
-  ImageBackground,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, View, StyleSheet, TextInput} from 'react-native';
 import {connect} from 'react-redux';
 import WrapperScreen from '../Resuables/WrapperScreen';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
 import {Measurements} from '../Resuables/Measurement';
 import {colors} from '../Resuables/frequentColors';
 import {Button, Overlay} from 'react-native-elements';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import UseHeader from '../Resuables/MyHeader';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import {isFormValid} from '../Resuables/validation';
 import NavigationRef from '../Resuables/RefNavigation';
-import {setUserInfoAction} from '../reduxStore/actions';
+import {UserAction, refreshCart} from '../reduxStore/actions';
 import Toast from 'react-native-root-toast';
 
 const ConfirmOrder = (props) => {
@@ -35,9 +29,8 @@ const ConfirmOrder = (props) => {
   const [addressErrMsg, setAddressErrMsg] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const product = props.product;
 
-  const Hire = () => {
+  const ConfirmTakenEasy = () => {
     const formValidResponse = isFormValid(
       firstName,
       lastName,
@@ -49,7 +42,7 @@ const ConfirmOrder = (props) => {
       errorMsgHandler(formValidResponse.errCategory, formValidResponse.errMsg);
     } else {
       CallApi();
-      setUserInfoAction({
+      UserAction({
         firstName: firstName,
         lastName: lastName,
         email: email,
@@ -84,7 +77,7 @@ const ConfirmOrder = (props) => {
             phonenumber: phone,
             address: address,
             email: email,
-            appname: 'Ball Collection',
+            appname: 'Take And Easy',
           }),
         },
       );
@@ -132,6 +125,7 @@ const ConfirmOrder = (props) => {
 
   const closeModal = () => {
     setShowModal(false);
+    props.refreshCart();
     NavigationRef.Push('Home');
   };
 
@@ -143,44 +137,35 @@ const ConfirmOrder = (props) => {
   const goBack = () => NavigationRef.GoBack();
 
   return (
-    <WrapperScreen style={{backgroundColor: colors.lightBackground2}}>
+    <WrapperScreen style={{backgroundColor: colors.primary}}>
+      <UseHeader
+        leftIcon={Ionicons}
+        leftIconName="chevron-back"
+        leftIconAction={goBack}
+        Title="Contact Information"
+        titleStyle={{fontSize: Measurements.width * 0.06, color: 'white'}}
+        leftIconColor="white"
+      />
       <KeyboardAwareScrollView style={styles.container}>
-        <View style={styles.headerWrapper}>
-          <TouchableOpacity onPress={goBack}>
-            <AntDesign
-              name="arrowleft"
-              color={colors.darkGray}
-              size={Measurements.width * 0.08}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.bookingDetailsCenterOverlay}>
-          <TouchableOpacity
-            onPress={goBack}
-            style={styles.bookingDetailsWrapper}>
-            <ImageBackground
-              source={product.images}
-              style={styles.TileImage}
-              imageStyle={{borderRadius: 10}}
-              resizeMode="contain"
-            />
-            <View style={styles.DetailWrapper}>
-              <Text style={styles.ProductName}>{product.productName}</Text>
-              <View style={styles.detailInner2}>
-                <Text style={styles.detailprice}>${product.price}</Text>
-              </View>
+        <View style={styles.summaryOverlay}>
+          <View style={styles.sm1}>
+            <View style={styles.sm2}>
+              <Text>Total:</Text>
+              <Text style={{fontWeight: 'bold'}}>${props.total}</Text>
             </View>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.personalInfoWrapper}>
-          <Text style={styles.personalInfoHeader}>Contact Info</Text>
+            <View style={styles.sm3}>
+              <Text style={styles.sm4}>Payment Mode:</Text>
+              <Text style={styles.sm4}>Payment on delivery</Text>
+            </View>
+          </View>
         </View>
         <View style={styles.PersonalInfoWrapper}>
           <View style={styles.singlePersonalInfoWrapper}>
             <Text
               style={{
                 ...styles.personalInfoHeadingName,
-                color: firstNameErrMsg ? 'red' : colors.primary,
+                color: firstNameErrMsg ? 'white' : colors.primary,
+                backgroundColor: firstNameErrMsg ? 'red' : colors.primary,
               }}>
               FIRST NAME <Text> {firstNameErrMsg}</Text>
             </Text>
@@ -201,7 +186,8 @@ const ConfirmOrder = (props) => {
             <Text
               style={{
                 ...styles.personalInfoHeadingName,
-                color: lastNameErrMsg ? 'red' : colors.primary,
+                color: lastNameErrMsg ? 'white' : colors.primary,
+                backgroundColor: lastNameErrMsg ? 'red' : colors.primary,
               }}>
               LAST NAME <Text> {lastNameErrMsg}</Text>
             </Text>
@@ -222,7 +208,8 @@ const ConfirmOrder = (props) => {
             <Text
               style={{
                 ...styles.personalInfoHeadingName,
-                color: emailErrMsg ? 'red' : colors.primary,
+                color: emailErrMsg ? 'white' : colors.primary,
+                backgroundColor: emailErrMsg ? 'red' : colors.primary,
               }}>
               EMAIL<Text> {emailErrMsg}</Text>
             </Text>
@@ -243,7 +230,8 @@ const ConfirmOrder = (props) => {
             <Text
               style={{
                 ...styles.personalInfoHeadingName,
-                color: phoneErrMsg ? 'red' : colors.primary,
+                color: phoneErrMsg ? 'white' : colors.primary,
+                backgroundColor: phoneErrMsg ? 'red' : colors.primary,
               }}>
               PHONE<Text> {phoneErrMsg}</Text>
             </Text>
@@ -265,7 +253,8 @@ const ConfirmOrder = (props) => {
             <Text
               style={{
                 ...styles.personalInfoHeadingName,
-                color: addressErrMsg ? 'red' : colors.primary,
+                color: addressErrMsg ? 'white' : colors.primary,
+                backgroundColor: addressErrMsg ? 'red' : colors.primary,
               }}>
               ADDRESS<Text> {addressErrMsg}</Text>
             </Text>
@@ -278,7 +267,6 @@ const ConfirmOrder = (props) => {
               <TextInput
                 placeholder="Address"
                 style={styles.Input}
-                multiline={true}
                 onChangeText={changeAddress}
               />
             </View>
@@ -289,10 +277,11 @@ const ConfirmOrder = (props) => {
             title="CONFIRM ORDER"
             raised
             buttonStyle={styles.confirmButton}
-            titleStyle={{color: 'white', fontWeight: 'bold'}}
+            titleStyle={{color: colors.primary, fontWeight: 'bold'}}
             containerStyle={styles.confirmButtonContainer}
-            onPress={Hire}
+            onPress={ConfirmTakenEasy}
             loading={loading}
+            loadingProps={{color: colors.primary}}
           />
         </View>
         <Overlay
@@ -300,14 +289,14 @@ const ConfirmOrder = (props) => {
           onBackdropPress={closeModal}
           animationType="fade">
           <View style={styles.ModalWrapper}>
-            <FontAwesome
-              name="check-circle"
+            <Entypo
+              name="check"
               size={Measurements.width * 0.25}
               color={colors.primary}
             />
-            <Text style={styles.ModalHeadText}>THANK YOU!</Text>
+            <Text style={styles.ModalHeadText}>TAKE AND EASY</Text>
             <Text style={styles.ModalSubText}>
-              Your Order has been confirmed
+              We have recieved your order!
             </Text>
           </View>
         </Overlay>
@@ -318,31 +307,45 @@ const ConfirmOrder = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    product: state.currentProductReducer,
+    total: state.ReducerCart.totalAmount,
   };
 };
 
-export default connect(mapStateToProps, {setUserInfoAction})(
+export default connect(mapStateToProps, {UserAction, refreshCart})(
   React.memo(ConfirmOrder),
 );
 
 const styles = StyleSheet.create({
-  detailprice: {
-    color: colors.lightGrey3,
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  detailInner2: {
-    display: 'flex',
+  sm4: {fontSize: Measurements.width * 0.03, fontWeight: 'bold'},
+  sm3: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 10,
-    width: Measurements.width * 0.35,
   },
-  TileImage: {
-    width: Measurements.width * 0.3,
-    height: Measurements.width * 0.35,
+  sm2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  sm1: {
+    width: '75%',
+    backgroundColor: 'white',
+    borderRadius: 50,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    padding: Measurements.width * 0.04,
+  },
+  summaryOverlay: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Measurements.height * 0.02,
   },
   ModalSubText: {
     fontSize: Measurements.width * 0.045,
@@ -374,7 +377,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   confirmButton: {
-    backgroundColor: colors.primary,
+    backgroundColor: 'white',
     padding: Measurements.height * 0.018,
   },
   ConfirmButtonWrapper: {
@@ -411,67 +414,13 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: 'bold',
     marginVertical: 6,
+    textAlign: 'center',
   },
   singlePersonalInfoWrapper: {
     marginVertical: 10,
   },
   PersonalInfoWrapper: {
     marginHorizontal: Measurements.width * 0.035,
-    marginVertical: 20,
-  },
-  personalInfoHeader: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  personalInfoWrapper: {
-    marginHorizontal: Measurements.width * 0.035,
-  },
-  bookingDetailsWrapper: {
-    borderColor: colors.primary,
-    borderWidth: 2,
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    borderRadius: 10,
-    padding: 10,
-    marginVertical: Measurements.height * 0.01,
-    backgroundColor: colors.primary,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
-  },
-  ProductName: {
-    color: colors.secondary,
-    fontSize: 18,
-    fontWeight: 'bold',
-    width: Measurements.width * 0.35,
-  },
-  DetailWrapper: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    marginLeft: Measurements.width * 0.06,
-    position: 'relative',
-  },
-  bookingDetailsCenterOverlay: {
-    marginBottom: Measurements.height * 0.01,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   container: {flex: 1},
-  headerWrapper: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingHorizontal: Measurements.width * 0.03,
-    paddingVertical: Measurements.height * 0.018,
-  },
 });

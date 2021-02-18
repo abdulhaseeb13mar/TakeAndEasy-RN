@@ -35,8 +35,7 @@ function Home(props) {
     setTabProducts(filteredProducts);
   };
 
-  const GotoSearch = () => RefNavigation.Navigate('SearchStones');
-  const GoToFavourites = () => RefNavigation.Navigate('Favourite');
+  const GotoSearch = () => RefNavigation.Navigate('SearchTakenEasy');
   const GotoCart = () => RefNavigation.NavigateAndReset('MyCart');
   const MyGoToSingleProduct = (item) => {
     props.setCurrentProductAction(item);
@@ -49,29 +48,13 @@ function Home(props) {
           leftIcon={Feather}
           leftIconName="shopping-bag"
           leftIconAction={GotoCart}
-          rightIconAction={GotoCart}
+          rightIconAction={GotoSearch}
           rightIcon={Feather}
           rightIconName="search"
           Title="Take and Easy"
         />
-        <Text
-          style={{
-            // ...border,
-            paddingLeft: Measurements.width * 0.04,
-            fontSize: Measurements.width * 0.065,
-            fontWeight: 'bold',
-          }}>
-          Let's Eat
-        </Text>
-        <Text
-          style={{
-            // ...border,
-            paddingLeft: Measurements.width * 0.04,
-            fontSize: Measurements.width * 0.065,
-            fontWeight: 'bold',
-          }}>
-          {currentCat.catagoryName}
-        </Text>
+        <Text style={styles.home_TE1}>Let's Eat</Text>
+        <Text style={styles.home_TE2}>{currentCat.catagoryName}</Text>
         <View style={styles.listingWrapper}>
           <Loop
             data={categories}
@@ -80,24 +63,8 @@ function Home(props) {
             )}
           />
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-          }}>
-          <Text
-            style={{
-              backgroundColor: colors.primary,
-              color: 'white',
-              fontSize: Measurements.width * 0.06,
-              paddingHorizontal: Measurements.width * 0.05,
-              paddingVertical: Measurements.height * 0.008,
-              borderTopRightRadius: 50,
-              borderBottomRightRadius: 50,
-            }}>
-            Special {currentCat.catagoryName}
-          </Text>
+        <View style={styles.home_TE3}>
+          <Text style={styles.home_TE4}>Special {currentCat.catagoryName}</Text>
         </View>
         <View style={{marginVertical: Measurements.height * 0.015}}>
           {tabProducts.length > 0 &&
@@ -130,29 +97,13 @@ const Tabs = ({item, currentCat, changeTab}) => {
       }}>
       <ImageBackground
         source={item.images}
-        style={{
-          width: Measurements.width * 0.38,
-          height: Measurements.height * 0.15,
-        }}
+        style={styles.home_TE5}
         resizeMode="contain"
       />
-      <View
-        style={{
-          width: '100%',
-          height: Measurements.height * 0.15,
-          position: 'relative',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-        }}>
+      <View style={styles.home_TE6}>
         <Text
           style={{
-            alignSelf: 'stretch',
-            width: Measurements.height * 0.15,
-            textAlign: 'center',
-            transform: [{rotate: '270deg'}],
-            fontWeight: 'bold',
-            fontSize: Measurements.width * 0.045,
+            ...styles.home_TE7,
             color:
               item.catagoryName === currentCat.catagoryName ? 'white' : 'black',
           }}>
@@ -163,99 +114,76 @@ const Tabs = ({item, currentCat, changeTab}) => {
   );
 };
 
-export const MyFilteredTile = ({item, MyGoToSingleProduct, currentCat}) => {
+export const MyFilteredTile = ({
+  item,
+  MyGoToSingleProduct,
+  currentCat,
+  plusCart,
+  minusCart,
+  isCart,
+}) => {
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: Measurements.height * 0.02,
-      }}>
+    <View style={styles.home_TE8}>
       <TouchableOpacity
         onPress={() => MyGoToSingleProduct(item)}
-        style={{
-          borderWidth: 1,
-          // paddingVertical: Measurements.height * 0.02,
-          paddingLeft: Measurements.width * 0.03,
-          width: Measurements.width * 0.85,
-          borderRadius: 20,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          backgroundColor: 'white',
-          elevation: 4,
-          borderColor: colors.lightBackground,
-          overflow: 'hidden',
-        }}>
-        <View
-          style={{
-            width: '66%',
-            alignSelf: 'stretch',
-            flexDirection: 'column',
-            justifyContent: 'space-around',
-          }}>
+        style={styles.home_TE9}>
+        <View style={styles.home_TE10}>
           <View style={{width: '100%'}}>
-            <Text
-              style={{
-                fontSize: Measurements.width * 0.05,
-                color: colors.primary,
-                fontWeight: 'bold',
-              }}>
-              {item.productName}
-            </Text>
-            <Text
-              style={{
-                color: colors.lightGrey3,
-                fontWeight: 'bold',
-              }}>
-              {currentCat.catagoryName}
-            </Text>
+            <Text style={styles.home_TE11}>{item.productName}</Text>
+            <Text style={styles.home_TE12}>{currentCat.catagoryName}</Text>
           </View>
-          <Text
-            style={{
-              width: '100%',
-              fontSize: Measurements.width * 0.045,
-              color: 'black',
-              fontWeight: 'bold',
-            }}>
-            ${item.price}
-          </Text>
+          <Text style={styles.home_TE13}>${item.price}</Text>
         </View>
-        <View
-          style={{
-            width: '34%',
-            marginLeft: Measurements.width * 0.08,
-          }}>
+        <View style={styles.home_TE14}>
           <ImageBackground
             source={item.images}
-            style={{
-              width: '100%',
-              height: Measurements.height * 0.15,
-            }}
+            style={styles.home_TE15}
             resizeMode="contain"
           />
         </View>
       </TouchableOpacity>
+      {isCart && (
+        <View style={styles.home_TE16}>
+          <View style={styles.home_TE17}>
+            <TouchableOpacity onPress={() => minusCart(item)}>
+              <Feather
+                name="minus-circle"
+                size={Measurements.width * 0.05}
+                color="white"
+              />
+            </TouchableOpacity>
+            <Text style={{fontWeight: 'bold', color: 'white'}}>
+              {item.added}
+            </Text>
+            <TouchableOpacity onPress={() => plusCart(item)}>
+              <Feather
+                name="plus-circle"
+                size={Measurements.width * 0.05}
+                color="white"
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
-
 const styles = StyleSheet.create({
-  FT_8: {
-    width: Measurements.width * 0.27,
-    height: Measurements.height * 0.158,
-  },
-  FT_7: {
-    backgroundColor: colors.lightBackground2,
-    borderRadius: 11,
-    position: 'absolute',
-    height: '100%',
-    width: Measurements.width * 0.33,
-    display: 'flex',
+  home_TE17: {
+    flexDirection: 'row',
+    marginVertical: Measurements.height * 0.013,
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'center',
+  },
+  home_TE16: {
+    width: '40%',
+    marginTop: -5,
+    backgroundColor: colors.primary,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
     elevation: 3,
+    paddingHorizontal: Measurements.width * 0.03,
+    paddingVertical: Measurements.height * 0.003,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -264,114 +192,104 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
   },
-  FT_6: {
-    color: colors.primary,
-    fontSize: Measurements.width * 0.048,
-    fontWeight: 'bold',
-  },
-  FT_5: {
-    width: Measurements.width * 0.5,
-    color: colors.primary,
-    fontSize: Measurements.width * 0.038,
-    fontWeight: 'bold',
-    opacity: 0.6,
-    marginVertical: Measurements.height * 0.015,
-  },
-  FT_4: {
-    width: Measurements.width * 0.5,
-    color: colors.primary,
-    fontSize: 22,
-    fontWeight: 'bold',
-    fontFamily: 'Didot-Bold',
-  },
-  FT_3: {
-    width: Measurements.width * 0.5,
-    minHeight: Measurements.height * 0.15,
-    height: Measurements.height * 0.15,
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-  },
-  FT_2: {
-    borderRadius: 11,
-    backgroundColor: colors.secondary,
-    display: 'flex',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-start',
-    paddingBottom: Measurements.width * 0.03,
-    paddingRight: Measurements.width * 0.03,
-    paddingTop: Measurements.height * 0.02,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-  },
-  FT_1: {
-    width: Measurements.width * 0.91,
-    height: Measurements.height * 0.25,
-    paddingVertical: Measurements.width * 0.04,
-    paddingLeft: Measurements.width * 0.05,
-    position: 'relative',
-    marginTop: Measurements.width * 0.05,
-  },
-  tab2: {
-    width: Measurements.width * 0.15,
-    height: Measurements.width * 0.15,
-  },
-  tab1: {
-    padding: Measurements.width * 0.02,
-    borderRadius: 15,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-  },
-  H_3: {
-    textAlign: 'center',
-    color: colors.primary,
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  H_2: {
-    textAlign: 'center',
-    color: colors.primary,
-    opacity: 0.6,
-    fontWeight: 'bold',
-  },
-  H_1: {
+  home_TE15: {
     width: '100%',
-    backgroundColor: 'white',
-    display: 'flex',
+    height: Measurements.height * 0.15,
+  },
+  home_TE14: {
+    width: '34%',
+    marginLeft: Measurements.width * 0.08,
+  },
+  home_TE13: {
+    width: '100%',
+    fontSize: Measurements.width * 0.045,
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  home_TE12: {
+    color: colors.lightGrey3,
+    fontWeight: 'bold',
+  },
+  home_TE11: {
+    fontSize: Measurements.width * 0.05,
+    color: colors.primary,
+    fontWeight: 'bold',
+  },
+  home_TE10: {
+    width: '66%',
+    alignSelf: 'stretch',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+  },
+  home_TE9: {
+    borderWidth: 1,
+    paddingLeft: Measurements.width * 0.03,
+    width: Measurements.width * 0.85,
+    borderRadius: 20,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: Measurements.width * 0.06,
-    paddingVertical: Measurements.height * 0.02,
-    elevation: 2,
+    backgroundColor: 'white',
+    elevation: 4,
+    borderColor: colors.lightBackground,
+    overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
   },
-  SearchBarWrapper: {
-    display: 'flex',
+  home_TE8: {
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: Measurements.height * 0.003,
+    marginBottom: Measurements.height * 0.02,
   },
-  HomeTabsText: {
+  home_TE7: {
+    alignSelf: 'stretch',
+    width: Measurements.height * 0.15,
+    textAlign: 'center',
+    transform: [{rotate: '270deg'}],
     fontWeight: 'bold',
+    fontSize: Measurements.width * 0.045,
+  },
+  home_TE6: {
+    width: '100%',
+    height: Measurements.height * 0.15,
+    position: 'relative',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  home_TE5: {
+    width: Measurements.width * 0.38,
+    height: Measurements.height * 0.15,
+  },
+  home_TE1: {
+    paddingLeft: Measurements.width * 0.04,
+    fontSize: Measurements.width * 0.065,
+    fontWeight: 'bold',
+  },
+  home_TE2: {
+    paddingLeft: Measurements.width * 0.04,
+    fontSize: Measurements.width * 0.065,
+    fontWeight: 'bold',
+  },
+  home_TE3: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  home_TE4: {
+    backgroundColor: colors.primary,
+    color: 'white',
+    fontSize: Measurements.width * 0.06,
+    paddingHorizontal: Measurements.width * 0.05,
+    paddingVertical: Measurements.height * 0.008,
+    borderTopRightRadius: 50,
+    borderBottomRightRadius: 50,
   },
   HomeTabsWrapper: {
     display: 'flex',
@@ -382,14 +300,14 @@ const styles = StyleSheet.create({
     paddingVertical: Measurements.width * 0.02,
     borderRadius: 20,
     elevation: 2,
-    // ...border,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
   },
-  divider2: {
-    borderColor: colors.lightGrey3,
-    borderWidth: 1,
-    width: '60%',
-  },
-  divider: {display: 'flex', alignItems: 'center', marginTop: 5},
 });
 
 export default connect(null, {setCurrentProductAction})(Home);

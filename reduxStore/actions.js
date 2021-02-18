@@ -54,7 +54,7 @@ export const minusCart = (item) => {
   };
 };
 
-export const resetCart = () => {
+export const refreshCart = () => {
   return async (dispatch) => {
     dispatch({
       type: ActionTypes.RESET_CART,

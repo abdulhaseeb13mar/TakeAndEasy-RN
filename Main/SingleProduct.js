@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -7,58 +7,31 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import {Button} from 'react-native-elements';
 import {Measurements} from '../Resuables/Measurement';
-import {colors} from '../Resuables/frequentColors';
 import WrapperScreen from '../Resuables/WrapperScreen';
-import {connect} from 'react-redux';
-import Entypo from 'react-native-vector-icons/Entypo';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import NavigationRef from '../Resuables/RefNavigation';
 import UseHeader from '../Resuables/MyHeader';
-import Feather from 'react-native-vector-icons/Feather';
+import {connect} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {colors} from '../Resuables/frequentColors';
+import NavigationRef from '../Resuables/RefNavigation';
+import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {
   setFavAction,
-  minusCart,
-  plusCart,
   removeFavAction,
+  plusCart,
+  minusCart,
 } from '../reduxStore/actions';
 
-function Booking(props) {
-  useEffect(() => {
-    // checkIfFav();
-  }, []);
-
-  const [fav, setFav] = useState(false);
+function SingleProduct(props) {
   const product = props.product;
-
-  const checkIfFav = () => {
-    for (let i = 0; i < props.favs.length; i++) {
-      if (props.favs[i].id === product.id) {
-        setFav(true);
-        break;
-      }
-    }
-  };
-
-  const proceedToBookings = () => {
-    props.setCurrentProductAction({...product});
-    NavigationRef.Navigate('PersonalInfo');
-  };
-
-  const MyAddToCart = () => props.plusCart(product);
 
   const MyRemoveFromCart = () => {
     props.myCart[product.id].added !== 0 && props.minusCart(product);
   };
 
+  const MyAddToCart = () => props.plusCart(product);
   const MyGotoCart = () => NavigationRef.NavigateAndReset('MyCart');
-
-  const MyToggleFav = () => {
-    fav ? props.removeFavAction(product.id) : props.setFavAction(product);
-    setFav(!fav);
-  };
   const MyGoBack = () => NavigationRef.GoBack();
 
   return (
@@ -72,111 +45,24 @@ function Booking(props) {
         rightIconName="shopping-bag"
         Title=""
       />
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'space-evenly',
-        }}>
-        <View
-          style={{
-            width: '100%',
-            paddingHorizontal: Measurements.width * 0.02,
-          }}>
+      <View style={styles.singleProduct_TE1}>
+        <View style={styles.singleProduct_TE2}>
           <ImageBackground
             source={product.images}
-            style={{
-              width: '100%',
-              height: Measurements.height * 0.4,
-            }}
+            style={styles.singleProduct_TE3}
             resizeMode="contain"
           />
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-around',
-            }}>
-            <Text
-              style={{
-                fontWeight: 'bold',
-                color: colors.primary,
-                fontSize: Measurements.width * 0.044,
-                alignSelf: 'stretch',
-                textAlignVertical: 'center',
-                paddingHorizontal: Measurements.width * 0.02,
-                borderRadius: 10,
-                borderColor: colors.lightBackground,
-                borderWidth: 1,
-                elevation: 2,
-                backgroundColor: 'white',
-              }}>
-              ${product.price}
-            </Text>
-            <View
-              style={{
-                alignSelf: 'stretch',
-                paddingHorizontal: Measurements.width * 0.02,
-                borderRadius: 10,
-                borderColor: colors.lightBackground,
-                borderWidth: 1,
-                elevation: 2,
-                backgroundColor: 'white',
-              }}>
-              <Text
-                style={{
-                  fontWeight: 'bold',
-                  color: colors.primary,
-                  fontSize: Measurements.width * 0.044,
-                }}>
-                {product.cal}
-              </Text>
-              <Text
-                style={{
-                  fontWeight: 'bold',
-                  color: colors.lightGrey3,
-                  textAlign: 'center',
-                }}>
-                Calories
-              </Text>
+          <View style={styles.singleProduct_TE4}>
+            <Text style={styles.singleProduct_TE5}>${product.price}</Text>
+            <View style={styles.singleProduct_TE6}>
+              <Text style={styles.singleProduct_TE7}>{product.cal}</Text>
+              <Text style={styles.singleProduct_TE8}>Calories</Text>
             </View>
           </View>
-          <Text
-            style={{
-              color: 'black',
-              fontSize: Measurements.width * 0.065,
-              marginVertical: Measurements.height * 0.02,
-              fontWeight: 'bold',
-              width: Measurements.width * 0.8,
-            }}>
-            {product.productName}
-          </Text>
-          <Text
-            style={{
-              lineHeight: Measurements.width * 0.055,
-              fontWeight: 'bold',
-              color: colors.lightGrey1,
-              width: Measurements.width * 0.75,
-            }}>
-            {product.discription}
-          </Text>
+          <Text style={styles.singleProduct_TE9}>{product.productName}</Text>
+          <Text style={styles.singleProduct_TE10}>{product.discription}</Text>
         </View>
-        <View
-          style={{
-            backgroundColor: colors.primary,
-            borderColor: colors.primary,
-            borderWidth: 2,
-            elevation: 2,
-            width: Measurements.width * 0.25,
-            alignSelf: 'flex-start',
-            paddingVertical: Measurements.height * 0.012,
-            borderTopRightRadius: 50,
-            borderBottomRightRadius: 50,
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            paddingRight: Measurements.width * 0.03,
-          }}>
+        <View style={styles.singleProduct_TE11}>
           <AntDesign
             color="white"
             name="heart"
@@ -186,15 +72,7 @@ function Booking(props) {
       </View>
       <View
         style={{
-          backgroundColor: colors.primary,
-          position: 'absolute',
-          bottom: 0,
-          right: 0,
-          height: Measurements.height * 0.24,
-          width: Measurements.width * 0.22,
-
-          borderTopLeftRadius: 30,
-          elevation: 3,
+          ...styles.singleProduct_TE12,
           ...(props.myCart[product.id] !== undefined &&
           props.myCart[product.id] !== 0
             ? {}
@@ -204,17 +82,9 @@ function Booking(props) {
                 justifyContent: 'flex-start',
               }),
         }}>
-        {console.log(props.myCart[product.id])}
         {props.myCart[product.id] !== undefined &&
         props.myCart[product.id].added !== 0 ? (
-          <View
-            style={{
-              height: '100%',
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-            }}>
-            {console.log('+ - ')}
-
+          <View style={styles.singleProduct_TE13}>
             <TouchableOpacity onPress={MyAddToCart}>
               <AntDesign
                 name="plus"
@@ -222,12 +92,7 @@ function Booking(props) {
                 size={Measurements.height * 0.04}
               />
             </TouchableOpacity>
-            <Text
-              style={{
-                fontSize: Measurements.width * 0.08,
-                color: 'white',
-                fontWeight: 'bold',
-              }}>
+            <Text style={styles.singleProduct_TE14}>
               {props.myCart[product.id].added}
             </Text>
             <TouchableOpacity onPress={MyRemoveFromCart}>
@@ -241,29 +106,156 @@ function Booking(props) {
         ) : (
           <TouchableOpacity
             onPress={MyAddToCart}
-            style={{
-              alignSelf: 'stretch',
-              width: Measurements.height * 0.24,
-              transform: [{rotate: '270deg'}],
-            }}>
-            {console.log('add to cart ka ')}
-            <Text
-              style={{
-                color: 'white',
-                height: Measurements.width * 0.22,
-                textAlign: 'center',
-                fontWeight: 'bold',
-                fontSize: Measurements.width * 0.048,
-                textAlignVertical: 'center',
-              }}>
-              ADD TO CART
-            </Text>
+            style={styles.singleProduct_TE15}>
+            <Text style={styles.singleProduct_TE16}>ADD TO CART</Text>
           </TouchableOpacity>
         )}
       </View>
     </WrapperScreen>
   );
 }
+
+const styles = StyleSheet.create({
+  singleProduct_TE16: {
+    color: 'white',
+    height: Measurements.width * 0.22,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: Measurements.width * 0.048,
+    textAlignVertical: 'center',
+  },
+  singleProduct_TE15: {
+    alignSelf: 'stretch',
+    width: Measurements.height * 0.24,
+    transform: [{rotate: '270deg'}],
+  },
+  singleProduct_TE14: {
+    fontSize: Measurements.width * 0.08,
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  singleProduct_TE13: {
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
+  singleProduct_TE12: {
+    backgroundColor: colors.primary,
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    height: Measurements.height * 0.24,
+    width: Measurements.width * 0.22,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    borderTopLeftRadius: 30,
+    elevation: 3,
+  },
+  singleProduct_TE11: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+    borderWidth: 2,
+    elevation: 2,
+    width: Measurements.width * 0.25,
+    alignSelf: 'flex-start',
+    paddingVertical: Measurements.height * 0.012,
+    borderTopRightRadius: 50,
+    borderBottomRightRadius: 50,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingRight: Measurements.width * 0.03,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+  },
+  singleProduct_TE10: {
+    lineHeight: Measurements.width * 0.055,
+    fontWeight: 'bold',
+    color: colors.lightGrey1,
+    width: Measurements.width * 0.75,
+  },
+  singleProduct_TE9: {
+    color: 'black',
+    fontSize: Measurements.width * 0.065,
+    marginVertical: Measurements.height * 0.02,
+    fontWeight: 'bold',
+    width: Measurements.width * 0.8,
+  },
+  singleProduct_TE8: {
+    fontWeight: 'bold',
+    color: colors.lightGrey3,
+    textAlign: 'center',
+  },
+  singleProduct_TE7: {
+    fontWeight: 'bold',
+    color: colors.primary,
+    fontSize: Measurements.width * 0.044,
+  },
+  singleProduct_TE6: {
+    alignSelf: 'stretch',
+    paddingHorizontal: Measurements.width * 0.02,
+    borderRadius: 10,
+    borderColor: colors.lightBackground,
+    borderWidth: 1,
+    elevation: 2,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+  },
+  singleProduct_TE5: {
+    fontWeight: 'bold',
+    color: colors.primary,
+    fontSize: Measurements.width * 0.044,
+    alignSelf: 'stretch',
+    textAlignVertical: 'center',
+    paddingHorizontal: Measurements.width * 0.02,
+    borderRadius: 10,
+    borderColor: colors.lightBackground,
+    borderWidth: 1,
+    elevation: 2,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+  },
+  singleProduct_TE4: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  singleProduct_TE3: {
+    width: '100%',
+    height: Measurements.height * 0.4,
+  },
+  singleProduct_TE2: {
+    width: '100%',
+    paddingHorizontal: Measurements.width * 0.02,
+  },
+  singleProduct_TE1: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
+});
 
 const mapStateToProps = (state) => {
   return {
@@ -273,16 +265,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-const border = {
-  borderColor: 'red',
-  borderWidth: 1,
-};
-
 export default connect(mapStateToProps, {
   setFavAction,
   removeFavAction,
   minusCart,
   plusCart,
-})(React.memo(Booking));
-
-const styles = StyleSheet.create({});
+})(React.memo(SingleProduct));

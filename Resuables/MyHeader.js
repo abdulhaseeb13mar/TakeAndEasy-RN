@@ -15,30 +15,41 @@ import {connect} from 'react-redux';
 // rightIconAction
 // rightIconName
 // titleStyle
+// leftIconColor
+// rightIconColor
 
-function MyHeader(props) {
-  const LeftIconLibrary = props.leftIcon;
-  const RightIconLibrary = props.rightIcon;
+function MyHeader({
+  leftIcon,
+  rightIcon,
+  leftIconName,
+  leftIconAction,
+  leftIconColor,
+  totalItems,
+  titleStyle,
+  Title,
+  rightIconAction,
+  rightIconName,
+  rightIconColor,
+}) {
+  const LeftIconLibrary = leftIcon;
+  const RightIconLibrary = rightIcon;
   return (
     <View style={styles.HeaderBarWrapper}>
       <View style={styles.HeaderBarInnerWrapper}>
         {LeftIconLibrary ? (
-          <TouchableOpacity
-            onPress={props.leftIconAction}
-            style={styles.IconWrap}>
+          <TouchableOpacity onPress={leftIconAction} style={styles.IconWrap}>
             <LeftIconLibrary
-              name={props.leftIconName}
+              name={leftIconName}
               size={Measurements.width * 0.065}
-              color={colors.primary}
+              color={leftIconColor ? leftIconColor : colors.primary}
             />
-            {props.totalItems > 0 &&
-              props.leftIconName.includes('shopping') && (
-                <Badge
-                  value={props.totalItems}
-                  containerStyle={styles.badgeContainer}
-                  badgeStyle={{backgroundColor: colors.primary}}
-                />
-              )}
+            {totalItems > 0 && leftIconName.includes('shopping') && (
+              <Badge
+                value={totalItems}
+                containerStyle={styles.badgeContainer}
+                badgeStyle={{backgroundColor: colors.primary}}
+              />
+            )}
           </TouchableOpacity>
         ) : (
           <View
@@ -49,26 +60,21 @@ function MyHeader(props) {
             }}
           />
         )}
-        <Text style={{...styles.HeaderText, ...props.titleStyle}}>
-          {props.Title}
-        </Text>
+        <Text style={{...styles.HeaderText, ...titleStyle}}>{Title}</Text>
         {RightIconLibrary ? (
-          <TouchableOpacity
-            onPress={props.rightIconAction}
-            style={styles.IconWrap}>
+          <TouchableOpacity onPress={rightIconAction} style={styles.IconWrap}>
             <RightIconLibrary
-              name={props.rightIconName}
+              name={rightIconName}
               size={Measurements.width * 0.075}
-              color={colors.primary}
+              color={rightIconColor ? rightIconColor : colors.primary}
             />
-            {props.totalItems > 0 &&
-              props.rightIconName.includes('shopping') && (
-                <Badge
-                  value={props.totalItems}
-                  containerStyle={styles.badgeContainer}
-                  badgeStyle={{backgroundColor: colors.primary}}
-                />
-              )}
+            {totalItems > 0 && rightIconName.includes('shopping') && (
+              <Badge
+                value={totalItems}
+                containerStyle={styles.badgeContainer}
+                badgeStyle={{backgroundColor: colors.primary}}
+              />
+            )}
           </TouchableOpacity>
         ) : (
           <View
