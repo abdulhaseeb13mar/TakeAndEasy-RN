@@ -11,16 +11,15 @@ let cart = {
   totalAmount: 0,
 };
 
-const cartReducer = (st = cart, action) => {
+const ReducerCart = (st = cart, action) => {
   let prev_items = {...st.items};
   switch (action.type) {
     case ActionTypes.ADD_ITEM_CART:
-      let ITEM_ID = `${action.payload.id}_${action.payload.color}`;
-      if (!prev_items[ITEM_ID]) {
-        prev_items[ITEM_ID] = {...action.payload};
+      if (!prev_items[action.payload.id]) {
+        prev_items[action.payload.id] = {...action.payload};
       }
-      let added1 = prev_items[ITEM_ID].added + 1;
-      prev_items[ITEM_ID].added = added1;
+      let added1 = prev_items[action.payload.id].added + 1;
+      prev_items[action.payload.id].added = added1;
       let tot_items = st.totalItems + 1;
       let tot_amount = (
         parseFloat(st.totalAmount) + parseFloat(action.payload.price)
@@ -33,12 +32,12 @@ const cartReducer = (st = cart, action) => {
       return st;
 
     case ActionTypes.REMOVE_ITEM_CART:
-      ITEM_ID = `${action.payload.id}_${action.payload.color}`;
-      const itemAdded = prev_items[ITEM_ID].added;
+      const id = action.payload.id;
+      const itemAdded = prev_items[id].added;
       if (itemAdded === 1) {
-        delete prev_items[ITEM_ID];
+        delete prev_items[id];
       } else {
-        prev_items[ITEM_ID].added = itemAdded - 1;
+        prev_items[action.payload.id].added = itemAdded - 1;
       }
       tot_items = st.totalItems - 1;
       tot_amount = (
@@ -76,7 +75,7 @@ const userReducer = (st = userState, action) => {
   }
   return st;
 };
-const crntPrdt = (state = crntPrdtState, action) => {
+const crntPrdtReducer = (state = crntPrdtState, action) => {
   switch (action.type) {
     case ActionTypes.SET_CURRENT_PRODUCT:
       state = Object.assign({}, state, {...action.payload});
@@ -112,4 +111,9 @@ const toggleFav = (state = FavItems, action) => {
   return state;
 };
 
-export default combineReducers({userReducer, crntPrdt, toggleFav, cartReducer});
+export default combineReducers({
+  userReducer,
+  crntPrdtReducer,
+  toggleFav,
+  ReducerCart,
+});

@@ -9,11 +9,11 @@ export const UserAction = (userinfo) => {
   };
 };
 
-export const setCrntPdt = (paintingInfo) => {
+export const setCurrentProductAction = (productInfo) => {
   return async (dispatch) => {
     dispatch({
       type: ActionTypes.SET_CURRENT_PRODUCT,
-      payload: paintingInfo,
+      payload: productInfo,
     });
   };
 };
@@ -36,7 +36,7 @@ export const removeFavAction = (itemId) => {
   };
 };
 
-export const addCartAction = (item) => {
+export const plusCart = (item) => {
   return async (dispatch) => {
     dispatch({
       type: ActionTypes.ADD_ITEM_CART,
@@ -45,7 +45,7 @@ export const addCartAction = (item) => {
   };
 };
 
-export const removeCartAction = (item) => {
+export const minusCart = (item) => {
   return async (dispatch) => {
     dispatch({
       type: ActionTypes.REMOVE_ITEM_CART,

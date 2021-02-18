@@ -11,16 +11,13 @@ import {
 import WrapperScreen from '../Resuables/WrapperScreen';
 import {colors} from '../Resuables/frequentColors';
 import {Measurements} from '../Resuables/Measurement';
-import {Avatar} from 'react-native-elements';
 import Data from '../dummyData';
 import Loop from '../Resuables/looping';
-import Entypo from 'react-native-vector-icons/Entypo';
 import RefNavigation from '../Resuables/RefNavigation';
 import {connect} from 'react-redux';
 import {setCurrentProductAction} from '../reduxStore/actions';
-import Image from 'react-native-fast-image';
-import Icon from '../pics/icon.jpg';
-import SearchBar from '../Resuables/searchingBar';
+import UseHeader from '../Resuables/MyHeader';
+import Feather from 'react-native-vector-icons/Feather';
 
 function Home(props) {
   useEffect(() => {
@@ -40,32 +37,41 @@ function Home(props) {
 
   const GotoSearch = () => RefNavigation.Navigate('SearchStones');
   const GoToFavourites = () => RefNavigation.Navigate('Favourite');
-  const GoToSingleProduct = (item) => {
+  const GotoCart = () => RefNavigation.NavigateAndReset('MyCart');
+  const MyGoToSingleProduct = (item) => {
     props.setCurrentProductAction(item);
     RefNavigation.Navigate('SingleProduct');
   };
   return (
-    <WrapperScreen style={{backgroundColor: colors.lightGrey4}}>
+    <WrapperScreen style={{backgroundColor: 'white'}}>
       <ScrollView bounces={false} style={{flex: 1}}>
-        <View style={styles.H_1}>
-          <TouchableOpacity onPress={GoToFavourites}>
-            <Entypo
-              name="heart-outlined"
-              color={colors.primary}
-              size={Measurements.height * 0.035}
-            />
-          </TouchableOpacity>
-          <View style={{width: '70%'}}>
-            <Text style={styles.H_2}>Location</Text>
-            <Text style={styles.H_3}>San Francisco CA 94133</Text>
-          </View>
-          <View>
-            <Avatar rounded size={Measurements.height * 0.05} source={Icon} />
-          </View>
-        </View>
-        <TouchableOpacity style={styles.SearchBarWrapper} onPress={GotoSearch}>
-          <SearchBar editable={false} />
-        </TouchableOpacity>
+        <UseHeader
+          leftIcon={Feather}
+          leftIconName="shopping-bag"
+          leftIconAction={GotoCart}
+          rightIconAction={GotoCart}
+          rightIcon={Feather}
+          rightIconName="search"
+          Title="Take and Easy"
+        />
+        <Text
+          style={{
+            // ...border,
+            paddingLeft: Measurements.width * 0.04,
+            fontSize: Measurements.width * 0.065,
+            fontWeight: 'bold',
+          }}>
+          Let's Eat
+        </Text>
+        <Text
+          style={{
+            // ...border,
+            paddingLeft: Measurements.width * 0.04,
+            fontSize: Measurements.width * 0.065,
+            fontWeight: 'bold',
+          }}>
+          {currentCat.catagoryName}
+        </Text>
         <View style={styles.listingWrapper}>
           <Loop
             data={categories}
@@ -74,22 +80,37 @@ function Home(props) {
             )}
           />
         </View>
-        <View style={styles.divider}>
-          <View style={styles.divider2} />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}>
+          <Text
+            style={{
+              backgroundColor: colors.primary,
+              color: 'white',
+              fontSize: Measurements.width * 0.06,
+              paddingHorizontal: Measurements.width * 0.05,
+              paddingVertical: Measurements.height * 0.008,
+              borderTopRightRadius: 50,
+              borderBottomRightRadius: 50,
+            }}>
+            Special {currentCat.catagoryName}
+          </Text>
         </View>
         <View style={{marginVertical: Measurements.height * 0.015}}>
-          {tabProducts.length > 0 && (
-            <Loop
-              horizontal={false}
-              data={tabProducts}
-              renderItem={({item}) => (
-                <FilteredTile
+          {tabProducts.length > 0 &&
+            tabProducts.map((item, index) => {
+              return (
+                <MyFilteredTile
+                  key={index}
                   item={item}
-                  GoToSingleProduct={GoToSingleProduct}
+                  currentCat={currentCat}
+                  MyGoToSingleProduct={MyGoToSingleProduct}
                 />
-              )}
-            />
-          )}
+              );
+            })}
         </View>
       </ScrollView>
     </WrapperScreen>
@@ -99,64 +120,124 @@ function Home(props) {
 const Tabs = ({item, currentCat, changeTab}) => {
   return (
     <TouchableOpacity
-      style={styles.HomeTabsWrapper}
-      onPress={() => changeTab(item)}>
+      onPress={() => changeTab(item)}
+      style={{
+        ...styles.HomeTabsWrapper,
+        backgroundColor:
+          item.catagoryName === currentCat.catagoryName
+            ? colors.primary
+            : colors.lightGrey4,
+      }}>
+      <ImageBackground
+        source={item.images}
+        style={{
+          width: Measurements.width * 0.38,
+          height: Measurements.height * 0.15,
+        }}
+        resizeMode="contain"
+      />
       <View
         style={{
-          ...styles.tab1,
-          backgroundColor:
-            item.catagoryName === currentCat.catagoryName
-              ? colors.primary
-              : colors.secondary,
+          width: '100%',
+          height: Measurements.height * 0.15,
+          position: 'relative',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
         }}>
-        <Image
-          source={
-            item.catagoryName === currentCat.catagoryName
-              ? item.iconsW
-              : item.iconsG
-          }
-          style={styles.tab2}
-        />
+        <Text
+          style={{
+            alignSelf: 'stretch',
+            width: Measurements.height * 0.15,
+            textAlign: 'center',
+            transform: [{rotate: '270deg'}],
+            fontWeight: 'bold',
+            fontSize: Measurements.width * 0.045,
+            color:
+              item.catagoryName === currentCat.catagoryName ? 'white' : 'black',
+          }}>
+          {item.catagoryName}
+        </Text>
       </View>
-      <Text
-        style={{
-          ...styles.HomeTabsText,
-          color:
-            item.catagoryName === currentCat.catagoryName
-              ? colors.primary
-              : colors.primary,
-          opacity: item.catagoryName === currentCat.catagoryName ? 1 : 0.6,
-          fontSize:
-            item.catagoryName === currentCat.catagoryName
-              ? Measurements.width * 0.045
-              : Measurements.width * 0.04,
-        }}>
-        {item.catagoryName}
-      </Text>
     </TouchableOpacity>
   );
 };
 
-export const FilteredTile = ({item, GoToSingleProduct}) => {
+export const MyFilteredTile = ({item, MyGoToSingleProduct, currentCat}) => {
   return (
-    <TouchableOpacity
-      onPress={() => GoToSingleProduct(item)}
-      style={styles.FT_1}>
-      <View style={styles.FT_2}>
-        <View style={styles.FT_3}>
-          <Text style={styles.FT_4}>{item.productName}</Text>
-          <Text style={styles.FT_5}>{item.address}</Text>
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: Measurements.height * 0.02,
+      }}>
+      <TouchableOpacity
+        onPress={() => MyGoToSingleProduct(item)}
+        style={{
+          borderWidth: 1,
+          // paddingVertical: Measurements.height * 0.02,
+          paddingLeft: Measurements.width * 0.03,
+          width: Measurements.width * 0.85,
+          borderRadius: 20,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          backgroundColor: 'white',
+          elevation: 4,
+          borderColor: colors.lightBackground,
+          overflow: 'hidden',
+        }}>
+        <View
+          style={{
+            width: '66%',
+            alignSelf: 'stretch',
+            flexDirection: 'column',
+            justifyContent: 'space-around',
+          }}>
+          <View style={{width: '100%'}}>
+            <Text
+              style={{
+                fontSize: Measurements.width * 0.05,
+                color: colors.primary,
+                fontWeight: 'bold',
+              }}>
+              {item.productName}
+            </Text>
+            <Text
+              style={{
+                color: colors.lightGrey3,
+                fontWeight: 'bold',
+              }}>
+              {currentCat.catagoryName}
+            </Text>
+          </View>
+          <Text
+            style={{
+              width: '100%',
+              fontSize: Measurements.width * 0.045,
+              color: 'black',
+              fontWeight: 'bold',
+            }}>
+            ${item.price}
+          </Text>
         </View>
-        <Text style={styles.FT_6}>${item.price}</Text>
-      </View>
-      <View style={styles.FT_7}>
-        <ImageBackground
-          source={item.images}
-          style={styles.FT_8}
-          resizeMode="contain"
-        />
-      </View>
-    </TouchableOpacity>
+        <View
+          style={{
+            width: '34%',
+            marginLeft: Measurements.width * 0.08,
+          }}>
+          <ImageBackground
+            source={item.images}
+            style={{
+              width: '100%',
+              height: Measurements.height * 0.15,
+            }}
+            resizeMode="contain"
+          />
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -298,7 +379,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     margin: Measurements.width * 0.03,
     paddingHorizontal: Measurements.width * 0.02,
-    paddingTop: Measurements.width * 0.02,
+    paddingVertical: Measurements.width * 0.02,
+    borderRadius: 20,
+    elevation: 2,
+    // ...border,
   },
   divider2: {
     borderColor: colors.lightGrey3,

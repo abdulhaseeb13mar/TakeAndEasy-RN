@@ -1,8 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
-import colors from '../Helpers/colors';
-import dim from '../Helpers/heightWidth';
+import {colors} from './frequentColors';
+import {Measurements} from './Measurement';
 import {Badge} from 'react-native-elements';
 import {connect} from 'react-redux';
 
@@ -28,9 +28,17 @@ function MyHeader(props) {
             style={styles.IconWrap}>
             <LeftIconLibrary
               name={props.leftIconName}
-              size={dim.width * 0.065}
-              color={colors.secondary}
+              size={Measurements.width * 0.065}
+              color={colors.primary}
             />
+            {props.totalItems > 0 &&
+              props.leftIconName.includes('shopping') && (
+                <Badge
+                  value={props.totalItems}
+                  containerStyle={styles.badgeContainer}
+                  badgeStyle={{backgroundColor: colors.primary}}
+                />
+              )}
           </TouchableOpacity>
         ) : (
           <View
@@ -50,16 +58,17 @@ function MyHeader(props) {
             style={styles.IconWrap}>
             <RightIconLibrary
               name={props.rightIconName}
-              size={dim.width * 0.075}
-              color={colors.secondary}
+              size={Measurements.width * 0.075}
+              color={colors.primary}
             />
-            {props.totalItems > 0 && (
-              <Badge
-                value={props.totalItems}
-                containerStyle={styles.badgeContainer}
-                badgeStyle={{backgroundColor: colors.primary}}
-              />
-            )}
+            {props.totalItems > 0 &&
+              props.rightIconName.includes('shopping') && (
+                <Badge
+                  value={props.totalItems}
+                  containerStyle={styles.badgeContainer}
+                  badgeStyle={{backgroundColor: colors.primary}}
+                />
+              )}
           </TouchableOpacity>
         ) : (
           <View
@@ -99,26 +108,26 @@ const styles = StyleSheet.create({
   HeaderText: {
     fontWeight: 'bold',
     color: colors.primary,
-    fontSize: dim.width * 0.08,
+    fontSize: Measurements.width * 0.08,
   },
   HeaderBarInnerWrapper: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: dim.width * 0.93,
+    width: Measurements.width * 0.93,
   },
   HeaderBarWrapper: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: dim.height * 0.018,
+    marginVertical: Measurements.height * 0.018,
   },
 });
 
 const mapStateToProps = (state) => ({
-  totalItems: state.cartReducer.totalItems,
+  totalItems: state.ReducerCart.totalItems,
 });
 
 export default connect(mapStateToProps, {})(MyHeader);

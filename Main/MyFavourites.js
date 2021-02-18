@@ -8,7 +8,7 @@ import {colors} from '../Resuables/frequentColors';
 import NavigationRef from '../Resuables/RefNavigation';
 import {FilteredTile} from './Home';
 import {connect} from 'react-redux';
-import MyHeader from '../Resuables/MyHeader';
+import UseHeader from '../Resuables/MyHeader';
 import Loop from '../Resuables/looping';
 import {setCurrentProductAction} from '../reduxStore/actions';
 
@@ -23,7 +23,7 @@ function MyFavourite(props) {
   return (
     <WrapperScreen style={{backgroundColor: colors.lightGrey4}}>
       <KeyboardAwareScrollView style={styles.container}>
-        <MyHeader
+        <UseHeader
           leftIcon={AntDesign}
           Title="FAVOURITES"
           leftIconName="arrowleft"
